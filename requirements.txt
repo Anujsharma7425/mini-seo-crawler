@@ -1,0 +1,8 @@
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+pandas>=2.0.0
+openpyxl>=3.1.0
+
+# Only needed for the web UI (app.py). Safe to remove if you use the CLI only.
+streamlit>=1.50.0

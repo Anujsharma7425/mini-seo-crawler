@@ -1,0 +1,19 @@
+# Netlify hosts the static project page in landing/.
+# The crawler itself is Python and runs on Streamlit Cloud / Hugging Face Spaces
+# (see DEPLOY.md) — Netlify Functions cannot run it.
+
+[build]
+  publish = "landing"
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/github"
+  to = "https://github.com/your-username/mini-seo-crawler"
+  status = 302
