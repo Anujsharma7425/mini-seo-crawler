@@ -1,0 +1,35 @@
+﻿URL,Severity,Issue,Status Code,Indexability,Title
+http://127.0.0.1:8899/missing.html,Critical,Broken URL (404),404,Non-Indexable (error),Error response
+http://127.0.0.1:8899/contact.html,High,Missing H1,200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/old-page.html,High,Noindex directive,200,Non-Indexable (noindex),Old Landing Page That Should Not Be Indexed Anymore
+http://127.0.0.1:8899/services.html,High,Duplicate title,200,Indexable,"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/thin.html,High,Duplicate title,200,Non-Indexable (canonicalised),"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/thin.html,High,Canonicalised to http://127.0.0.1:8899/services.html,200,Non-Indexable (canonicalised),"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/about.html,Medium,Missing meta description,200,Indexable,About
+http://127.0.0.1:8899/about.html,Medium,Multiple H1 tags (2),200,Indexable,About
+http://127.0.0.1:8899/about.html,Medium,Low word count (24 words),200,Indexable,About
+http://127.0.0.1:8899/about.html,Medium,2 image(s) missing ALT text,200,Indexable,About
+http://127.0.0.1:8899/blog/index.html,Medium,Low word count (28 words),200,Indexable,"Ecommerce Fulfilment Blog | Tips, Guides and Industry News"
+http://127.0.0.1:8899/blog/post-1.html,Medium,Low word count (126 words),200,Indexable,How to Choose an Ecommerce Fulfilment Partner in 2026
+http://127.0.0.1:8899/contact.html,Medium,Missing canonical,200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/contact.html,Medium,Low word count (11 words),200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/index.html,Medium,Low word count (74 words),200,Indexable,Demo Fulfilment Company | Ecommerce Fulfilment in Europe
+http://127.0.0.1:8899/index.html,Medium,1 image(s) missing ALT text,200,Indexable,Demo Fulfilment Company | Ecommerce Fulfilment in Europe
+http://127.0.0.1:8899/old-page.html,Medium,Missing meta description,200,Non-Indexable (noindex),Old Landing Page That Should Not Be Indexed Anymore
+http://127.0.0.1:8899/old-page.html,Medium,Low word count (11 words),200,Non-Indexable (noindex),Old Landing Page That Should Not Be Indexed Anymore
+http://127.0.0.1:8899/services.html,Medium,Duplicate meta description,200,Indexable,"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/services.html,Medium,Low word count (84 words),200,Indexable,"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/thin.html,Medium,Duplicate meta description,200,Non-Indexable (canonicalised),"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/thin.html,Medium,Low word count (6 words),200,Non-Indexable (canonicalised),"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/about.html,Low,Short title (5 chars),200,Indexable,About
+http://127.0.0.1:8899/about.html,Low,No structured data (JSON-LD) found,200,Indexable,About
+http://127.0.0.1:8899/blog/index.html,Low,No structured data (JSON-LD) found,200,Indexable,"Ecommerce Fulfilment Blog | Tips, Guides and Industry News"
+http://127.0.0.1:8899/contact.html,Low,Long title (87 chars),200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/contact.html,Low,Short meta description (11 chars),200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/contact.html,Low,Missing viewport meta tag (mobile),200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/contact.html,Low,Missing html lang attribute,200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/contact.html,Low,No structured data (JSON-LD) found,200,Indexable,Contact Us Today For A Free Ecommerce Fulfilment Quote From Our European Warehouse Team
+http://127.0.0.1:8899/old-page.html,Low,No structured data (JSON-LD) found,200,Non-Indexable (noindex),Old Landing Page That Should Not Be Indexed Anymore
+http://127.0.0.1:8899/services.html,Low,Long title (64 chars),200,Indexable,"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/thin.html,Low,Long title (64 chars),200,Non-Indexable (canonicalised),"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"
+http://127.0.0.1:8899/thin.html,Low,No structured data (JSON-LD) found,200,Non-Indexable (canonicalised),"Ecommerce Fulfilment Services | Storage, Pick and Pack, Shipping"

@@ -1,0 +1,92 @@
+
+========================================================================
+Crawling http://127.0.0.1:8899/index.html  (max 20 pages, 3 workers, 0.0s delay)
+========================================================================
+  [   1/20] 200     0.00s  http://127.0.0.1:8899/index.html
+  [   2/20] 200     0.00s  http://127.0.0.1:8899/about.html
+  [   3/20] 200     0.00s  http://127.0.0.1:8899/blog/index.html
+  [   4/20] 200     0.01s  http://127.0.0.1:8899/contact.html
+  [   5/20] 404     0.00s  http://127.0.0.1:8899/missing.html
+  [   6/20] 200     0.00s  http://127.0.0.1:8899/old-page.html
+  [   7/20] 200     0.00s  http://127.0.0.1:8899/services.html
+  [   8/20] 200     0.00s  http://127.0.0.1:8899/thin.html
+  [   9/20] 200     0.00s  http://127.0.0.1:8899/blog/post-1.html
+
+========================================================================
+CRAWL SUMMARY  —  http://127.0.0.1:8899/index.html
+========================================================================
+  SEO health score : 54/100
+  Time taken       : 0.0s
+
+Response codes
+  Pages crawled                    9
+  2xx Success                      8
+  3xx Redirect                     0
+  4xx Client error                 1
+  5xx Server error                 0
+  Failed / no response             0
+  Average response time (s)        0.003
+
+Indexability
+  Indexable pages                  6
+  Non-indexable pages              3
+  Noindex pages                    1
+  Canonicalised to another URL     1
+  Missing canonical                1
+
+On-page SEO
+  Missing titles                   0
+  Duplicate titles                 2
+  Titles too long                  3
+  Missing meta descriptions        2
+  Duplicate meta descriptions      2
+  Missing H1                       1
+  Multiple H1                      1
+  Thin pages (<300 words)          8
+  Images missing ALT (total)       3
+  Pages with structured data       3
+
+Top issue types
+  Low word count                           8 page(s)
+  No structured data                       5 page(s)
+  Long title                               3 page(s)
+  Images missing ALT text                  2 page(s)
+  Missing meta description                 2 page(s)
+  Duplicate title                          2 page(s)
+  Duplicate meta description               2 page(s)
+  Short title                              1 page(s)
+  Multiple H1 tags                         1 page(s)
+  Short meta description                   1 page(s)
+
+Pages needing attention first
+   8 issues  http://127.0.0.1:8899/contact.html
+           - Long title (87 chars)
+           - Short meta description (11 chars)
+           - Missing H1
+           - Missing canonical
+   6 issues  http://127.0.0.1:8899/about.html
+           - Short title (5 chars)
+           - Missing meta description
+           - Multiple H1 tags (2)
+           - Low word count (24 words)
+   6 issues  http://127.0.0.1:8899/thin.html
+           - Long title (64 chars)
+           - Duplicate title
+           - Duplicate meta description
+           - Canonicalised to http://127.0.0.1:8899/services.html
+   4 issues  http://127.0.0.1:8899/old-page.html
+           - Noindex directive
+           - Missing meta description
+           - Low word count (11 words)
+           - No structured data (JSON-LD) found
+   4 issues  http://127.0.0.1:8899/services.html
+           - Long title (64 chars)
+           - Duplicate title
+           - Duplicate meta description
+           - Low word count (84 words)
+========================================================================
+
+Reports saved
+  examples/sample_report.csv
+  examples/sample_report_issues.csv
+  examples/sample_report.xlsx

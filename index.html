@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini SEO Crawler — a technical SEO audit tool in Python</title>
+<meta name="description" content="A Python crawler that audits a website's technical SEO — indexability, metadata, headings, canonicals, links and images — and exports a severity-scored CSV or Excel report.">
+<link rel="canonical" href="https://YOUR-NETLIFY-SITE.netlify.app/">
+
+<!-- ============================================================
+     EDIT THESE THREE THINGS BEFORE YOU DEPLOY:
+       1. Every YOUR-GITHUB-URL below  -> your repo link
+       2. Every YOUR-DEMO-URL below    -> your Streamlit / HF Spaces link
+       3. YOUR NAME in the footer and the canonical URL above
+     ============================================================ -->
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mini SEO Crawler">
+<meta property="og:description" content="A Python crawler that audits a website's technical SEO and exports a severity-scored report.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#EDF0F2;
+    --panel:#FFFFFF;
+    --ink:#101B24;
+    --muted:#5B6B78;
+    --rule:#D3DAE0;
+    --ok:#127A46;
+    --warn:#A65B00;
+    --bad:#B32D23;
+    --link:#1B5FA8;
+    --shell:#0E1A22;
+    --shell-text:#C9D6DE;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:17px;
+    line-height:1.6;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:var(--link)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+  h1,h2,h3{line-height:1.15;margin:0;font-weight:600;letter-spacing:-0.02em}
+  p{margin:0 0 1em}
+
+  /* ---------- masthead ---------- */
+  .masthead{padding:28px 0 0;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted)}
+  .masthead span{color:var(--ink)}
+
+  /* ---------- hero ---------- */
+  .hero{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:64px 0 72px}
+  .hero h1{font-size:clamp(2.1rem,4.4vw,3.1rem)}
+  .hero .lede{font-size:1.12rem;color:var(--muted);max-width:44ch;margin-top:20px}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+  .btn{
+    display:inline-block;padding:11px 20px;border-radius:3px;text-decoration:none;
+    font-size:.95rem;font-weight:500;border:1px solid var(--ink);
+  }
+  .btn-solid{background:var(--ink);color:var(--paper)}
+  .btn-solid:hover{background:#1d2f3d}
+  .btn-line{background:transparent;color:var(--ink)}
+  .btn-line:hover{background:#E1E6EA}
+
+  /* ---------- terminal ---------- */
+  .shell{
+    background:var(--shell);border-radius:5px;padding:20px 22px;
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.85;
+    color:var(--shell-text);overflow:hidden;
+  }
+  .shell .prompt{color:#7FB6E0}
+  .shell .row{opacity:0}
+  .shell.play .row{animation:appear .01s forwards}
+  .shell .c-ok{color:#5FCB92}
+  .shell .c-warn{color:#E0A863}
+  .shell .c-bad{color:#E88A80}
+  .shell .dim{color:#7A8C97}
+  .shell hr{border:0;border-top:1px solid #22333F;margin:12px 0}
+  .shell .score{color:#F2F6F8;font-size:14px}
+  @keyframes appear{to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){
+    .shell .row{opacity:1}
+    .shell.play .row{animation:none}
+  }
+
+  /* ---------- sections ---------- */
+  section{padding:64px 0;border-top:1px solid var(--rule)}
+  .section-head{max-width:56ch;margin-bottom:32px}
+  .section-head h2{font-size:1.6rem}
+  .section-head p{color:var(--muted);margin-top:12px}
+
+  /* ---------- report table ---------- */
+  .table-scroll{overflow-x:auto;background:var(--panel);border:1px solid var(--rule);border-radius:4px}
+  table{border-collapse:collapse;width:100%;font-size:14px;min-width:720px}
+  th{
+    text-align:left;font-weight:500;color:var(--muted);font-size:12.5px;
+    padding:12px 16px;border-bottom:1px solid var(--rule);white-space:nowrap;
+  }
+  td{padding:12px 16px;border-bottom:1px solid #E8ECEF;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.url{font-family:"IBM Plex Mono",monospace;font-size:13px}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace;font-size:13px}
+  .pill{
+    display:inline-block;padding:2px 9px;border-radius:11px;font-size:12px;
+    font-family:"IBM Plex Mono",monospace;white-space:nowrap;
+  }
+  .pill.ok{background:#DEF0E6;color:var(--ok)}
+  .pill.warn{background:#F6E9D6;color:var(--warn)}
+  .pill.bad{background:#F7E0DE;color:var(--bad)}
+  .caption{color:var(--muted);font-size:14px;margin-top:14px}
+
+  /* ---------- checks list ---------- */
+  .checks{display:grid;grid-template-columns:repeat(2,1fr);gap:0 56px}
+  .check{display:grid;grid-template-columns:150px 1fr;gap:20px;padding:14px 0;border-top:1px solid var(--rule)}
+  .check dt{font-weight:500}
+  .check dd{margin:0;color:var(--muted);font-size:15px}
+
+  /* ---------- pipeline ---------- */
+  .pipeline{counter-reset:step;display:grid;gap:0}
+  .step{
+    display:grid;grid-template-columns:40px 190px 1fr;gap:20px;align-items:baseline;
+    padding:18px 0;border-top:1px solid var(--rule);
+  }
+  .step::before{
+    counter-increment:step;content:counter(step);
+    font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:13px;
+  }
+  .step h3{font-size:1rem;font-weight:500}
+  .step p{margin:0;color:var(--muted);font-size:15px}
+  .step code{font-family:"IBM Plex Mono",monospace;font-size:13px;background:#E3E8EC;padding:1px 5px;border-radius:3px}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--rule);padding:40px 0 64px;color:var(--muted);font-size:14px}
+  footer .links{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:16px}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;gap:40px;padding:44px 0 56px}
+    .checks{grid-template-columns:1fr}
+    .step{grid-template-columns:28px 1fr;gap:12px}
+    .step p{grid-column:2}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="masthead">mini-seo-crawler <span>v1.0</span> — python</div>
+
+  <header class="hero">
+    <div>
+      <h1>Audit a website's technical SEO from one command.</h1>
+      <p class="lede">
+        Point it at a URL. It crawls the site, reads every title, canonical, heading,
+        robots directive and image, then hands back a spreadsheet of exactly what is broken
+        and how badly.
+      </p>
+      <div class="actions">
+        <a class="btn btn-solid" href="YOUR-DEMO-URL">Try the live demo</a>
+        <a class="btn btn-line" href="YOUR-GITHUB-URL">Read the code</a>
+      </div>
+    </div>
+
+    <div class="shell" id="shell">
+      <div class="row"><span class="prompt">$</span> python run.py https://example.com --max-pages 100</div>
+      <div class="row dim">&nbsp;</div>
+      <div class="row">[  1/100] <span class="c-ok">200</span>  0.31s  /</div>
+      <div class="row">[  2/100] <span class="c-ok">200</span>  0.28s  /about</div>
+      <div class="row">[  3/100] <span class="c-warn">301</span>  0.44s  /old-pricing</div>
+      <div class="row">[  4/100] <span class="c-bad">404</span>  0.19s  /services/legacy</div>
+      <div class="row">[  5/100] <span class="c-ok">200</span>  0.36s  /blog/shipping-costs</div>
+      <div class="row dim">…</div>
+      <div class="row"><hr></div>
+      <div class="row score">SEO health score : 54/100</div>
+      <div class="row dim">Missing meta descriptions .... 12</div>
+      <div class="row dim">Duplicate titles ............. 4</div>
+      <div class="row dim">Multiple H1 .................. 6</div>
+      <div class="row dim">Images missing ALT ........... 31</div>
+      <div class="row"><hr></div>
+      <div class="row">Saved <span class="c-ok">seo_crawl_example_com.xlsx</span></div>
+    </div>
+  </header>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The output is a report, not a wall of logs</h2>
+      <p>
+        Every crawled URL becomes a row with its own verdict. This is real output from the
+        test site bundled with the repo, which contains deliberate mistakes.
+      </p>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>URL</th><th>Status</th><th>Indexability</th>
+            <th>Title len</th><th>H1</th><th>Words</th><th>Issues</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="url">/index.html</td>
+            <td><span class="pill ok">200</span></td>
+            <td>Indexable</td><td class="num">56</td><td class="num">1</td><td class="num">74</td><td class="num">2</td>
+          </tr>
+          <tr>
+            <td class="url">/about.html</td>
+            <td><span class="pill ok">200</span></td>
+            <td>Indexable</td><td class="num">5</td><td class="num">2</td><td class="num">24</td><td class="num">6</td>
+          </tr>
+          <tr>
+            <td class="url">/services.html</td>
+            <td><span class="pill ok">200</span></td>
+            <td>Indexable</td><td class="num">64</td><td class="num">1</td><td class="num">84</td><td class="num">4</td>
+          </tr>
+          <tr>
+            <td class="url">/contact.html</td>
+            <td><span class="pill ok">200</span></td>
+            <td>Indexable</td><td class="num">87</td><td class="num">0</td><td class="num">11</td><td class="num">8</td>
+          </tr>
+          <tr>
+            <td class="url">/thin.html</td>
+            <td><span class="pill ok">200</span></td>
+            <td>Canonicalised elsewhere</td><td class="num">64</td><td class="num">1</td><td class="num">6</td><td class="num">6</td>
+          </tr>
+          <tr>
+            <td class="url">/old-page.html</td>
+            <td><span class="pill ok">200</span></td>
+            <td>Blocked by noindex</td><td class="num">51</td><td class="num">1</td><td class="num">11</td><td class="num">4</td>
+          </tr>
+          <tr>
+            <td class="url">/missing.html</td>
+            <td><span class="pill bad">404</span></td>
+            <td>Not found</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">
+      The Excel export adds three more sheets: a summary, one row per issue sorted by
+      severity, and a count of how many pages each issue type affects.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What it reads on every page</h2>
+    </div>
+    <div class="checks">
+      <dl class="check"><dt>Response</dt><dd>Status code, final URL, redirect chain, response time, crawl depth</dd></dl>
+      <dl class="check"><dt>Indexability</dt><dd>noindex, X-Robots-Tag, canonical conflicts, robots.txt blocks</dd></dl>
+      <dl class="check"><dt>Title</dt><dd>Text, length, and whether another page uses the same one</dd></dl>
+      <dl class="check"><dt>Meta description</dt><dd>Text, length, duplicates across the site</dd></dl>
+      <dl class="check"><dt>Headings</dt><dd>H1 text and count, H2 count, pages with none or several</dd></dl>
+      <dl class="check"><dt>Canonical</dt><dd>Missing, self-referencing, or pointing somewhere else</dd></dl>
+      <dl class="check"><dt>Links</dt><dd>Internal, external and nofollow counts per page</dd></dl>
+      <dl class="check"><dt>Images</dt><dd>Total images and how many are missing ALT text</dd></dl>
+      <dl class="check"><dt>Content</dt><dd>Visible word count with scripts and styles stripped out</dd></dl>
+      <dl class="check"><dt>Markup</dt><dd>html lang, viewport, hreflang tags, JSON-LD schema types</dd></dl>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How a crawl runs</h2>
+      <p>Four stages, each in its own module, so any one of them can be tested on its own.</p>
+    </div>
+    <div class="pipeline">
+      <div class="step">
+        <div>
+          <h3>Fetch</h3>
+        </div>
+        <p>A shared session with retries on 429 and 5xx, per-request timeouts, a capped response
+          size, and a rate limiter every worker thread draws from. <code>fetcher.py</code></p>
+      </div>
+      <div class="step">
+        <div><h3>Discover</h3></div>
+        <p>Breadth-first from the homepage, staying on one domain. URLs are normalised first, so
+          tracking parameters and fragments never cause the same page to be fetched twice.
+          <code>crawler.py</code></p>
+      </div>
+      <div class="step">
+        <div><h3>Parse</h3></div>
+        <p>BeautifulSoup pulls out every on-page element listed above and turns it into a plain
+          data object that knows nothing about HTTP. <code>parser.py</code></p>
+      </div>
+      <div class="step">
+        <div><h3>Judge</h3></div>
+        <p>Indexability is decided by a priority chain, duplicates are found across the whole
+          crawl, and each problem is scored Critical to Low. <code>analyzer.py</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Run it yourself</h2>
+    </div>
+    <div class="shell">
+      <div><span class="prompt">$</span> git clone YOUR-GITHUB-URL</div>
+      <div><span class="prompt">$</span> pip install -r requirements.txt</div>
+      <div><span class="prompt">$</span> python run.py https://example.com --max-pages 100</div>
+      <div class="dim">&nbsp;</div>
+      <div class="dim"># or open the web version</div>
+      <div><span class="prompt">$</span> streamlit run app.py</div>
+    </div>
+    <p class="caption">
+      Python 3.8+. Built with requests, BeautifulSoup, pandas and openpyxl. 88 tests, including a
+      full crawl against a local server. Please only crawl sites you own or have permission to audit.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="YOUR-GITHUB-URL">Source on GitHub</a>
+      <a href="YOUR-DEMO-URL">Live demo</a>
+      <a href="YOUR-GITHUB-URL#tests">Tests</a>
+    </div>
+    <div>Built by YOUR NAME · MIT licensed</div>
+  </div>
+</footer>
+
+<script>
+  // One reveal on load: the crawl log fills in the way a real crawl does.
+  (function () {
+    var shell = document.getElementById('shell');
+    if (!shell) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      shell.querySelectorAll('.row').forEach(function (row) { row.style.opacity = 1; });
+      return;
+    }
+    shell.classList.add('play');
+    shell.querySelectorAll('.row').forEach(function (row, i) {
+      row.style.animationDelay = (120 + i * 110) + 'ms';
+    });
+  })();
+</script>
+
+</body>
+</html>
